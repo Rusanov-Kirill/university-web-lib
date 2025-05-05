@@ -1,12 +1,42 @@
-# React + Vite
+# University Web Library
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Веб-приложение для отображения библиотеки книг. Разрабатывается по дисциплине из университета - Веб-разработка. 
 
-Currently, two official plugins are available:
+## 🚀 Как запустить проект локально
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+git clone https://github.com/Rusanov-Kirill/university-web-lib.git
+cd university-web-lib
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+После запуска открой в браузере: http://localhost:5173
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📦 Используемые технологии
+    
+    - React
+
+    - CSS Modules
+
+    - Vite
+
+## 📁 Структура проекта 
+
+    - /assets — статические ресурсы, такие как изображения и иконки
+
+    - /components — переиспользуемые React-компоненты
+
+    - /hooks — собственные React-хуки (например, useWindowWidth)
+
+    - /mocks — тестовые данные (например, список книг)
+
+    - /pages — основные страницы приложения
+
+    -/routes — маршруты и логика навигации по приложению 
+
+## 🛠 Требования
+
+    - Node.js версии 18 и выше
+
+    - npm или yarn для управления зависимостями
