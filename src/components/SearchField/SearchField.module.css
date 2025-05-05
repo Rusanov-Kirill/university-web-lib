@@ -1,0 +1,37 @@
+.search-field {
+    margin: 3vh 0;
+    align-self: center;
+    width: 50vw;
+    height: 7vh;
+    border-radius: 50px;
+    border: none;
+    background-color: #2C7EDC;
+    opacity: 50%;
+    color: white;
+    padding: 0 2vw;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.search-field:focus {
+    outline: none;
+}
+
+.search-field::placeholder {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+@media (max-width: 480px) {
+    .search-field {
+        width: 85vw;
+        font-size: 16px;
+        padding-left: 7vw;
+    }
+
+    .search-field::placeholder {
+        font-size: 16px;
+    }
+}

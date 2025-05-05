@@ -1,0 +1,52 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    margin: 3vh 0;
+}
+
+.image {
+    height: 15vh;
+    aspect-ratio: 1 / 1;
+}
+
+.author-text-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2vw; 
+}
+
+.authors-name { 
+    font-weight: 700;
+    font-size: 24px;
+    padding-bottom: 2vh;
+}
+
+.authors-description {
+    font-weight: 700;
+    font-size: 16px;
+    color: black;
+    line-height: 140%;
+    text-align: justify;
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin-top: 0;
+    }
+    .image {
+        height: 10vh;
+    }
+
+    .author-text-container {
+        margin-left: 5vw; 
+    }
+
+    .authors-name {
+        font-size: 16px;
+        padding-bottom: 0;
+    }
+
+    .authors-description {
+        font-size: 12px;
+    }
+}

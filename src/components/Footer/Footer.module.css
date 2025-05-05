@@ -1,0 +1,25 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    background-color: #2C7EDC;;
+    flex-direction: column;
+    height: 7vh;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    user-select: none;
+}
+
+.p {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .p {
+        font-size: 20px;
+    }
+}

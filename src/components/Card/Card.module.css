@@ -1,0 +1,111 @@
+.card {
+    display: flex;
+    width: 10vw;
+    height: 33vh;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    margin-top: 2vh;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.image {
+    display: flex;
+    width: 100%;
+    height: 25vh;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.book-info-container {
+    display: none;
+}
+
+.title {
+    margin: 0;
+    padding: 0.5em 0.5em 0.1em;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    -webkit-line-clamp: 1; 
+    line-clamp: 1; 
+}
+
+.author, .genres {
+    margin: 0;
+    padding: 0.1em 0.5em;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: bold;
+    -webkit-line-clamp: 1; 
+    line-clamp: 1; 
+}
+
+.author, .genres, .title {
+    display: -webkit-box;  
+    overflow: hidden;
+    -webkit-box-orient: vertical; 
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 1024px) {
+    .card {
+        width: 22vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        flex-direction: row;
+        border: none;
+        width: 85vw;
+        margin-top: 0;
+        margin-bottom: 2vh;
+        overflow: hidden;
+    }
+
+    .image {
+        width: 35vw;
+        object-fit: contain;
+    }
+
+    .title, .author, .genres {
+        display: none;
+    }
+
+    .book-info-container {
+        display: flex;
+        flex-direction: column;
+        width: 50vw;
+    }
+
+    .title-mobile {
+        max-width: 100%;
+        margin: 0;
+        padding: 0.1em 0.5em 0.5em;
+        color: black;
+        font-size: 20px;
+        font-weight: bold;
+        -webkit-line-clamp: 2; 
+        line-clamp: 2; 
+        height: 3em;
+    }
+
+    .author-mobile, .genres-mobile {
+        margin: 0;
+        padding: 0.2em 0.5em;
+        color: #ccc;
+        font-size: 16px;
+        font-weight: bold;
+        -webkit-line-clamp: 2; 
+        line-clamp: 2; 
+    }
+
+    .author-mobile, .genres-mobile, .title-mobile {
+        display: -webkit-box;  
+        overflow: hidden;
+        -webkit-box-orient: vertical; 
+        text-overflow: ellipsis;
+    }
+}
