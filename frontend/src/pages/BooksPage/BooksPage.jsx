@@ -13,7 +13,7 @@ function BooksPage() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost/api/books')
+        fetch('http://localhost/api/books_extraction.php')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Ошибка HTTP: ${response.status}`);
