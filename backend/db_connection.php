@@ -12,7 +12,6 @@ $port = $_ENV['DB_PORT'];
 
 try {
     $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$db", $user, $pass);
-    echo "Успешное подключение к базе данных.";
 } catch (PDOException $e) {
     echo "Ошибка подключения к базе данных: " . $e->getMessage();
 }
