@@ -4,6 +4,15 @@
     margin: 7vh 10vw;
 }
 
+.radio-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 5vw;
+}
+
 .cards-less-6 {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -18,6 +27,20 @@
     flex-wrap: wrap;
     justify-content: space-between;
     margin-bottom: 3vh;
+}
+
+.loading-wrapper {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 500;
+    color: black;
 }
 
 @media (min-width: 481px) and (max-width: 1024px) {
