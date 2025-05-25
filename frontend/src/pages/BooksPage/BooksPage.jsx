@@ -9,24 +9,20 @@ import { useWindowWidth } from '../../hooks/useWindowWidth'
 function BooksPage() {
     const width = useWindowWidth();
     const [books, setBooks] = useState([]);
+    const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
+    const fetchBooks = (title = '') => {
         setLoading(true);
-        let url = 'http://localhost/api/books_extraction.php';
-
-        if (searchTerm) {
-            url = `http://localhost/api/books_search.php?title=${encodeURIComponent(searchTerm)}`;
-        }
+        const url = title
+            ? `http://localhost/api/books_search.php?title=${encodeURIComponent(title)}`
+            : `http://localhost/api/books_extraction.php`;
 
         fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Ошибка HTTP: ${response.status}`);
-                }
-                return response.json();
+            .then(res => {
+                if (!res.ok) throw new Error(`Ошибка HTTP: ${res.status}`);
+                return res.json();
             })
             .then(data => {
                 setBooks(data);
@@ -36,7 +32,19 @@ function BooksPage() {
                 setError(err.message);
                 setLoading(false);
             });
-    }, [searchTerm]);
+    };
+
+    useEffect(() => {
+        fetchBooks(); 
+    }, []);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            fetchBooks(query); 
+        }, 300);
+
+        return () => clearTimeout(timeout);
+    }, [query]);
 
     if (error) console.log(error);
 
@@ -55,7 +63,7 @@ function BooksPage() {
         <>
             <Header />
             <main className={styles.main}>
-                <SearchField onSearch={setSearchTerm}/>
+                <SearchField value={query} onChange={setQuery} />
                 <div className={styles[`${cards}`]}>
                     {loading ? <div className={styles['loading-wrapper']}>Loading...</div> : (
                         books.map(book => (

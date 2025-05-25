@@ -1,21 +1,13 @@
 import { useState } from 'react';
 import styles from './SearchField.module.css'
 
-function SearchField() {
-    const [query, setQuery] = useState('');
-
-    const handleChange = (e) => {
-        const value = e.target.value;
-        setQuery(value);
-        onSearch(value);  
-    };
-
+function SearchField({ value, onChange }) {
     return (
         <input 
             placeholder='Поиск' 
             className={styles['search-field']}
-            value={query}
-            onChange={handleChange}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
         />
     )
 }
