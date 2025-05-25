@@ -11,9 +11,17 @@ function BooksPage() {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost/api/books_extraction.php')
+        setLoading(true);
+        let url = 'http://localhost/api/books_extraction.php';
+
+        if (searchTerm) {
+            url = `http://localhost/api/books_search.php?title=${encodeURIComponent(searchTerm)}`;
+        }
+
+        fetch(url)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Ошибка HTTP: ${response.status}`);
@@ -28,7 +36,7 @@ function BooksPage() {
                 setError(err.message);
                 setLoading(false);
             });
-    }, []);
+    }, [searchTerm]);
 
     if (error) console.log(error);
 
@@ -47,7 +55,7 @@ function BooksPage() {
         <>
             <Header />
             <main className={styles.main}>
-                <SearchField />
+                <SearchField onSearch={setSearchTerm}/>
                 <div className={styles[`${cards}`]}>
                     {loading ? <div className={styles['loading-wrapper']}>Loading...</div> : (
                         books.map(book => (
