@@ -3,14 +3,38 @@ import Footer from '../../components/Footer/Footer'
 import Card from '../../components/Card/Card'
 import SearchField from '../../components/SearchField/SearchField'
 import styles from './BooksPage.module.css'
-import { books } from '../../mocks/books'
+import { useState, useEffect } from 'react'
 import { useWindowWidth } from '../../hooks/useWindowWidth'
 
 function BooksPage() {
     const width = useWindowWidth();
+    const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetch('http://localhost/api/books')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                setBooks(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                setError(err.message);
+                setLoading(false);
+            });
+    }, []);
+
+    if (error) console.log(error);
+
     let cards = '';
 
-    switch(true) {
+    switch (true) {
         case (width > 480 && width <= 1024):
             cards = books.length < 3 ? 'cards-less-3' : 'cards-more-3';
             break;
@@ -25,16 +49,18 @@ function BooksPage() {
             <main className={styles.main}>
                 <SearchField />
                 <div className={styles[`${cards}`]}>
-                    {books.map(book => (
-                        <Card 
-                            key={book.id}
-                            id={book.id}
-                            image={book.image}
-                            title={book.title}
-                            author={book.author}
-                            genres={book.genres}
-                        />
-                    ))}
+                    {loading ? <div className={styles['loading-wrapper']}>Loading...</div> : (
+                        books.map(book => (
+                            <Card
+                                key={book.id}
+                                id={book.id}
+                                image={book.image}
+                                title={book.title}
+                                author={book.author}
+                                genres={book.genres}
+                            />
+                        ))
+                    )}
                 </div>
             </main>
             <Footer />
