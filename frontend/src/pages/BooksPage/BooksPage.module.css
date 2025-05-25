@@ -4,6 +4,15 @@
     margin: 7vh 10vw;
 }
 
+.radio-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 5vw;
+}
+
 .cards-less-6 {
     display: grid;
     grid-template-columns: repeat(6, 1fr);

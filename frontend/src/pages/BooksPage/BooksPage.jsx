@@ -13,6 +13,7 @@ function BooksPage() {
 
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState('');
+    const [searchBy, setSearchBy] = useState('title'); // 'title' или 'author'
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -24,14 +25,18 @@ function BooksPage() {
         setError(null);
 
         if (query.trim() !== '') {
-            // Поиск по названию
-            fetch(`http://localhost/api/books_search.php?title=${encodeURIComponent(query)}`)
+            const endpoint =
+                searchBy === 'title'
+                    ? 'books_search.php'
+                    : 'books_search_author.php';
+
+            fetch(`http://localhost/api/${endpoint}?${searchBy}=${encodeURIComponent(query)}`)
                 .then(res => {
                     if (!res.ok) throw new Error(`Ошибка HTTP: ${res.status}`);
                     return res.json();
                 })
                 .then(data => {
-                    // Фильтруем по жанру, если он есть
+                    // Фильтруем по жанру, если есть фильтр жанра
                     const filtered = genreFilter
                         ? data.filter(book => book.genres.includes(genreFilter))
                         : data;
@@ -43,12 +48,11 @@ function BooksPage() {
                     setLoading(false);
                 });
         } else {
-            // Если нет поиска — запрашиваем по жанру или все книги
+            // Если пустой запрос, то грузим книги по жанру или все
             let url = 'http://localhost/api/books_extraction.php';
             if (genreFilter) {
                 url = `http://localhost/api/books_by_genre.php?genre=${encodeURIComponent(genreFilter)}`;
             }
-
             fetch(url)
                 .then(res => {
                     if (!res.ok) throw new Error(`Ошибка HTTP: ${res.status}`);
@@ -63,8 +67,7 @@ function BooksPage() {
                     setLoading(false);
                 });
         }
-    }, [query, genreFilter]);
-
+    }, [query, searchBy, genreFilter]);
 
     let cardsClass = '';
     if (width > 480 && width <= 1024) {
@@ -77,7 +80,30 @@ function BooksPage() {
         <>
             <Header />
             <main className={styles.main}>
-                <SearchField value={query} onChange={setQuery} />
+                <div className={styles['radio-wrapper']}>
+                    <label>
+                        <input
+                            type="radio"
+                            name="searchBy"
+                            value="title"
+                            checked={searchBy === 'title'}
+                            onChange={() => setSearchBy('title')}
+                        />
+                        По названию
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="searchBy"
+                            value="author"
+                            checked={searchBy === 'author'}
+                            onChange={() => setSearchBy('author')}
+                        />
+                        По автору
+                    </label>
+                    <SearchField value={query} onChange={setQuery} />   
+                </div>
+
                 <div className={styles[cardsClass]}>
                     {loading ? (
                         <div className={styles['loading-wrapper']}>Loading...</div>
