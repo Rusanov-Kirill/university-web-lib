@@ -1,5 +1,5 @@
 import SearchField from '../SearchField/SearchField.jsx'
-import Logo from '../../assets/SiteLogo.png'
+import Logo from '../../../public/assets/SiteLogo.png'
 import styles from './Header.module.css'
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
