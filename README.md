@@ -12,7 +12,7 @@ npm install
 cd ..
 cd backend
 composer install
-php -S localhost:8000
+php -S 127.0.0.1:8000
 start nginx // В папке где у вас на ПК находиться nginx.exe
 ```
 
