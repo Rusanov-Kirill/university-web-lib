@@ -8,8 +8,14 @@
 git clone https://github.com/Rusanov-Kirill/university-web-lib.git
 cd university-web-lib
 npm install
-npm run dev
+cd ..
+cd backend
+composer install
+php -S localhost:8000
+start nginx // В папке где у вас на ПК находиться nginx.exe
 ```
+
+БД и файл .env в backend папке надо создавать самому - проект учебный и на общедоступность не претенудует
 
 После запуска открой в браузере: http://localhost:5173
 
