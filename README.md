@@ -12,11 +12,22 @@ npm install
 cd ..
 cd backend
 composer install
-php -S 127.0.0.1:8000
+php -S 127.0.0.1:8000 // Запусать обязательно в папке backend
 start nginx // В папке где у вас на ПК находиться nginx.exe
+
+При добавлении или изменении файлов в папке frontend необходимо прописать команду npm run build
 ```
 
 БД и файл .env в backend папке надо создавать самому - проект учебный и на общедоступность не претенудует
+Внешний вид .env для backend:
+```
+DB_HOST=localhost
+DB_NAME={название базы данных}
+DB_USER={имя юзера}
+DB_PASSWORD={пароль}
+DB_PORT={порт}
+
+```
 
 После запуска открой в браузере: http://localhost
 
