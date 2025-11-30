@@ -5,12 +5,38 @@
     min-height: 70vh;
 }
 
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3vh;
+    position: relative;
+}
+
 .title {
     text-align: center;
-    margin-bottom: 3vh;
+    margin-bottom: 0;
     font-size: 2.5rem;
     font-weight: 600;
     color: #333;
+    flex: 1;
+}
+
+.logoutBtn {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.logoutBtn:hover {
+    background: #007bff;
+    transform: translateY(-1px);
 }
 
 .tabs {
@@ -44,12 +70,14 @@
     gap: 4vw;
 }
 
-.formSection, .editSection {
+.formSection,
+.editSection {
     flex: 1;
     min-width: 300px;
 }
 
-.formSection h2, .editSection h2 {
+.formSection h2,
+.editSection h2 {
     margin-bottom: 2vh;
     font-size: 1.5rem;
     color: #333;
@@ -211,7 +239,7 @@
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .image {
@@ -321,7 +349,8 @@
         gap: 3vh;
     }
 
-    .formSection, .editSection {
+    .formSection,
+    .editSection {
         min-width: auto;
     }
 
@@ -330,9 +359,34 @@
     }
 }
 
+@media (max-width: 768px) {
+    .headerRow {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .logoutBtn {
+        position: static;
+        align-self: stretch;
+    }
+
+    .title {
+        margin-bottom: 0;
+    }
+}
+
 @media (max-width: 480px) {
     .main {
         margin: 12vh 5vw 7vh;
+    }
+
+    .headerRow {
+        margin-bottom: 2vh;
+    }
+
+    .title {
+        font-size: 2rem;
     }
 
     .tabs {

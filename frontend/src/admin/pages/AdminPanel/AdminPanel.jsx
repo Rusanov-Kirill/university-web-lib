@@ -3,9 +3,11 @@ import Footer from '../../../components/Footer/Footer'
 import styles from './AdminPanel.module.css'
 import { useState, useEffect } from 'react'
 import { useWindowWidth } from '../../../hooks/useWindowWidth'
+import { useNavigate } from 'react-router-dom'
 
 function AdminPanel() {
     const width = useWindowWidth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('books');
     const [books, setBooks] = useState([]);
     const [authors, setAuthors] = useState([]);
@@ -14,16 +16,16 @@ function AdminPanel() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [bookForm, setBookForm] = useState({ 
-        title: '', 
-        author: '', 
-        image: null, 
-        genres: [] 
+    const [bookForm, setBookForm] = useState({
+        title: '',
+        author: '',
+        image: null,
+        genres: []
     });
-    const [authorForm, setAuthorForm] = useState({ 
-        name: '', 
-        description: '', 
-        image: null 
+    const [authorForm, setAuthorForm] = useState({
+        name: '',
+        description: '',
+        image: null
     });
     const [genreForm, setGenreForm] = useState({ title: '' });
 
@@ -39,10 +41,36 @@ function AdminPanel() {
         loadAvailableGenres();
     }, []);
 
+    const handleLogout = () => {
+        localStorage.removeItem('isAdmin');
+        navigate('/admin-login');
+    };
+
+    useEffect(() => {
+        const isAdmin = localStorage.getItem('isAdmin');
+        const loginTime = localStorage.getItem('adminLoginTime');
+
+        if (isAdmin !== 'true') {
+            navigate('/admin-login');
+            return;
+        }
+
+        if (loginTime) {
+            const currentTime = new Date().getTime();
+            const hoursPassed = (currentTime - parseInt(loginTime)) / (1000 * 60 * 60);
+
+            if (hoursPassed >= 24) {
+                localStorage.removeItem('isAdmin');
+                localStorage.removeItem('adminLoginTime');
+                navigate('/admin-login');
+            }
+        }
+    }, [navigate]);
+
     const loadData = async () => {
         setLoading(true);
         setError(null);
-        
+
         try {
             const [booksRes, authorsRes, genresRes] = await Promise.all([
                 fetch('http://localhost/api/books_extraction.php'),
@@ -81,7 +109,7 @@ function AdminPanel() {
     const handleBookImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setBookForm({...bookForm, image: file});
+            setBookForm({ ...bookForm, image: file });
             setBookPreview(URL.createObjectURL(file));
         }
     };
@@ -89,7 +117,7 @@ function AdminPanel() {
     const handleAuthorImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setAuthorForm({...authorForm, image: file});
+            setAuthorForm({ ...authorForm, image: file });
             setAuthorPreview(URL.createObjectURL(file));
         }
     };
@@ -113,7 +141,7 @@ function AdminPanel() {
             formData.append('title', bookForm.title);
             formData.append('author', bookForm.author);
             formData.append('genres', JSON.stringify(bookForm.genres));
-            
+
             if (bookForm.image) {
                 formData.append('image', bookForm.image);
             }
@@ -122,9 +150,9 @@ function AdminPanel() {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
-            
+
             if (response.ok) {
                 setBookForm({ title: '', author: '', image: null, genres: [] });
                 setBookPreview('');
@@ -143,7 +171,7 @@ function AdminPanel() {
             const formData = new FormData();
             formData.append('name', authorForm.name);
             formData.append('description', authorForm.description);
-            
+
             if (authorForm.image) {
                 formData.append('image', authorForm.image);
             }
@@ -152,9 +180,9 @@ function AdminPanel() {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await response.json();
-            
+
             if (response.ok) {
                 setAuthorForm({ name: '', description: '', image: null });
                 setAuthorPreview('');
@@ -175,7 +203,7 @@ function AdminPanel() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(genreForm)
             });
-            
+
             if (response.ok) {
                 setGenreForm({ title: '' });
                 loadData();
@@ -190,7 +218,7 @@ function AdminPanel() {
         setEditingItem({ type, id: item.id });
         setEditForm({ ...item });
         setEditImage(null);
-        
+
         if (type === 'book' && item.image) {
             setBookPreview(item.image);
         } else if (type === 'author' && item.image) {
@@ -211,11 +239,11 @@ function AdminPanel() {
         try {
             const { type, id } = editingItem;
             const endpoint = `http://localhost/api/admin/update_${type}.php`;
-            
+
             if (type === 'book' || type === 'author') {
                 const formData = new FormData();
                 formData.append('id', id);
-                
+
                 if (type === 'book') {
                     formData.append('title', editForm.title);
                     formData.append('author', editForm.author);
@@ -224,7 +252,7 @@ function AdminPanel() {
                     formData.append('name', editForm.name);
                     formData.append('description', editForm.description);
                 }
-                
+
                 if (editImage) {
                     formData.append('image', editImage);
                 }
@@ -233,9 +261,9 @@ function AdminPanel() {
                     method: 'POST',
                     body: formData
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (response.ok) {
                     setEditingItem(null);
                     setEditForm({});
@@ -252,7 +280,7 @@ function AdminPanel() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id, ...editForm })
                 });
-                
+
                 if (response.ok) {
                     setEditingItem(null);
                     setEditForm({});
@@ -266,12 +294,12 @@ function AdminPanel() {
 
     const handleDelete = async (type, id) => {
         if (!window.confirm('Вы уверены, что хотите удалить эту запись?')) return;
-        
+
         try {
             const response = await fetch(`http://localhost/api/admin/delete_${type}.php?id=${id}`, {
                 method: 'DELETE'
             });
-            
+
             if (response.ok) {
                 loadData();
                 if (type === 'genre') {
@@ -303,17 +331,17 @@ function AdminPanel() {
                                     type="text"
                                     placeholder="Название книги"
                                     value={editForm.title || ''}
-                                    onChange={(e) => setEditForm({...editForm, title: e.target.value})}
+                                    onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
                                     required
                                 />
                                 <input
                                     type="text"
                                     placeholder="Автор"
                                     value={editForm.author || ''}
-                                    onChange={(e) => setEditForm({...editForm, author: e.target.value})}
+                                    onChange={(e) => setEditForm({ ...editForm, author: e.target.value })}
                                     required
                                 />
-                                
+
                                 <div className={styles.imageUpload}>
                                     <label>Обложка книги:</label>
                                     <input
@@ -347,7 +375,7 @@ function AdminPanel() {
                                                         const updatedGenres = e.target.checked
                                                             ? [...currentGenres, genre.title]
                                                             : currentGenres.filter(g => g !== genre.title);
-                                                        setEditForm({...editForm, genres: updatedGenres});
+                                                        setEditForm({ ...editForm, genres: updatedGenres });
                                                     }}
                                                 />
                                                 {genre.title}
@@ -357,23 +385,23 @@ function AdminPanel() {
                                 </div>
                             </>
                         )}
-                        
+
                         {type === 'author' && (
                             <>
                                 <input
                                     type="text"
                                     placeholder="Имя автора"
                                     value={editForm.name || ''}
-                                    onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                                     required
                                 />
                                 <textarea
                                     placeholder="Описание"
                                     value={editForm.description || ''}
-                                    onChange={(e) => setEditForm({...editForm, description: e.target.value})}
+                                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                                     required
                                 />
-                                
+
                                 <div className={styles.imageUpload}>
                                     <label>Фото автора:</label>
                                     <input
@@ -395,17 +423,17 @@ function AdminPanel() {
                                 </div>
                             </>
                         )}
-                        
+
                         {type === 'genre' && (
                             <input
                                 type="text"
                                 placeholder="Название жанра"
                                 value={editForm.title || ''}
-                                onChange={(e) => setEditForm({...editForm, title: e.target.value})}
+                                onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
                                 required
                             />
                         )}
-                        
+
                         <div className={styles.editButtons}>
                             <button type="submit" className={styles.saveBtn}>Сохранить</button>
                             <button type="button" onClick={cancelEdit} className={styles.cancelBtn}>Отмена</button>
@@ -424,17 +452,17 @@ function AdminPanel() {
                             type="text"
                             placeholder="Название книги"
                             value={bookForm.title}
-                            onChange={(e) => setBookForm({...bookForm, title: e.target.value})}
+                            onChange={(e) => setBookForm({ ...bookForm, title: e.target.value })}
                             required
                         />
                         <input
                             type="text"
                             placeholder="Автор"
                             value={bookForm.author}
-                            onChange={(e) => setBookForm({...bookForm, author: e.target.value})}
+                            onChange={(e) => setBookForm({ ...bookForm, author: e.target.value })}
                             required
                         />
-                        
+
                         <div className={styles.imageUpload}>
                             <label>Обложка книги:</label>
                             <input
@@ -462,7 +490,7 @@ function AdminPanel() {
                                                 const updatedGenres = e.target.checked
                                                     ? [...bookForm.genres, genre.title]
                                                     : bookForm.genres.filter(g => g !== genre.title);
-                                                setBookForm({...bookForm, genres: updatedGenres});
+                                                setBookForm({ ...bookForm, genres: updatedGenres });
                                             }}
                                         />
                                         {genre.title}
@@ -473,23 +501,23 @@ function AdminPanel() {
                         <button type="submit">Добавить книгу</button>
                     </form>
                 )}
-                
+
                 {activeTab === 'authors' && (
                     <form onSubmit={handleAuthorSubmit} className={styles.form}>
                         <input
                             type="text"
                             placeholder="Имя автора"
                             value={authorForm.name}
-                            onChange={(e) => setAuthorForm({...authorForm, name: e.target.value})}
+                            onChange={(e) => setAuthorForm({ ...authorForm, name: e.target.value })}
                             required
                         />
                         <textarea
                             placeholder="Описание"
                             value={authorForm.description}
-                            onChange={(e) => setAuthorForm({...authorForm, description: e.target.value})}
+                            onChange={(e) => setAuthorForm({ ...authorForm, description: e.target.value })}
                             required
                         />
-                        
+
                         <div className={styles.imageUpload}>
                             <label>Фото автора:</label>
                             <input
@@ -507,14 +535,14 @@ function AdminPanel() {
                         <button type="submit">Добавить автора</button>
                     </form>
                 )}
-                
+
                 {activeTab === 'genres' && (
                     <form onSubmit={handleGenreSubmit} className={styles.form}>
                         <input
                             type="text"
                             placeholder="Название жанра"
                             value={genreForm.title}
-                            onChange={(e) => setGenreForm({...genreForm, title: e.target.value})}
+                            onChange={(e) => setGenreForm({ ...genreForm, title: e.target.value })}
                             required
                         />
                         <button type="submit">Добавить жанр</button>
@@ -528,22 +556,30 @@ function AdminPanel() {
         <>
             <Header />
             <main className={styles.main}>
-                <h1 className={styles.title}>Админ-панель</h1>
-                
+                <div className={styles.headerRow}>
+                    <h1 className={styles.title}>Админ-панель</h1>
+                    <button
+                        onClick={handleLogout}
+                        className={styles.logoutBtn}
+                    >
+                        Выйти
+                    </button>
+                </div>
+
                 <div className={styles.tabs}>
-                    <button 
+                    <button
                         className={`${styles.tab} ${activeTab === 'books' ? styles.active : ''}`}
                         onClick={() => setActiveTab('books')}
                     >
                         Книги
                     </button>
-                    <button 
+                    <button
                         className={`${styles.tab} ${activeTab === 'authors' ? styles.active : ''}`}
                         onClick={() => setActiveTab('authors')}
                     >
                         Авторы
                     </button>
-                    <button 
+                    <button
                         className={`${styles.tab} ${activeTab === 'genres' ? styles.active : ''}`}
                         onClick={() => setActiveTab('genres')}
                     >
@@ -559,7 +595,6 @@ function AdminPanel() {
                     <div className={styles.content}>
                         {renderForm()}
 
-                        {/* Список записей */}
                         <div className={styles.listSection}>
                             <h2>Существующие записи</h2>
                             <div className={styles[cardsClass]}>
@@ -576,13 +611,13 @@ function AdminPanel() {
                                             </div>
                                         </div>
                                         <div className={styles.actions}>
-                                            <button 
+                                            <button
                                                 className={styles.editBtn}
                                                 onClick={() => startEdit('book', book)}
                                             >
                                                 Изменить
                                             </button>
-                                            <button 
+                                            <button
                                                 className={styles.deleteBtn}
                                                 onClick={() => handleDelete('book', book.id)}
                                             >
@@ -591,7 +626,7 @@ function AdminPanel() {
                                         </div>
                                     </div>
                                 ))}
-                                
+
                                 {activeTab === 'authors' && authors.map(author => (
                                     <div key={author.id} className={styles.card}>
                                         <img src={author.image} alt={author.name} className={styles.image} />
@@ -602,13 +637,13 @@ function AdminPanel() {
                                             </p>
                                         </div>
                                         <div className={styles.actions}>
-                                            <button 
+                                            <button
                                                 className={styles.editBtn}
                                                 onClick={() => startEdit('author', author)}
                                             >
                                                 Изменить
                                             </button>
-                                            <button 
+                                            <button
                                                 className={styles.deleteBtn}
                                                 onClick={() => handleDelete('author', author.id)}
                                             >
@@ -617,7 +652,7 @@ function AdminPanel() {
                                         </div>
                                     </div>
                                 ))}
-                                
+
                                 {activeTab === 'genres' && genres.map(genre => (
                                     <div key={genre.id} className={styles.card}>
                                         <div className={styles.info}>
@@ -625,13 +660,13 @@ function AdminPanel() {
                                             <p>Книг: {genre.pages}</p>
                                         </div>
                                         <div className={styles.actions}>
-                                            <button 
+                                            <button
                                                 className={styles.editBtn}
                                                 onClick={() => startEdit('genre', genre)}
                                             >
                                                 Изменить
                                             </button>
-                                            <button 
+                                            <button
                                                 className={styles.deleteBtn}
                                                 onClick={() => handleDelete('genre', genre.id)}
                                             >
