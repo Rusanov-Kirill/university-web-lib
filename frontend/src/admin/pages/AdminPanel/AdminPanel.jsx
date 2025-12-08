@@ -43,6 +43,7 @@ function AdminPanel() {
 
     const handleLogout = () => {
         localStorage.removeItem('isAdmin');
+        localStorage.removeItem('adminLoginTime');
         navigate('/admin-login');
     };
 
