@@ -1,7 +1,7 @@
 .main {
     display: flex;
     min-height: 100vh;
-    background: linear-gradient(164deg, #007bff,#ffffff); 
+    background: linear-gradient(164deg, #007bff, #ffffff);
 }
 
 .login-container {
@@ -131,6 +131,21 @@
 
 .testData strong {
     color: #495057;
+}
+
+.yandexButton {
+    width: 100%;
+    background: linear-gradient(45deg, #ffcc00, #ffdd44) !important;
+    color: #000 !important;
+    border: 2px solid #e6b800 !important;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 204, 0, 0.4);
+}
+
+.yandexButton:hover:not(:disabled) {
+    background: linear-gradient(45deg, #e6b800, #ffcc00) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(255, 204, 0, 0.6);
 }
 
 @media (min-width: 481px) and (max-width: 1024px) {
