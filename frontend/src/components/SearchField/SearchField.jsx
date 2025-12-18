@@ -1,4 +1,3 @@
-// SearchField.jsx - Improved with proper props and feedback
 import styles from './SearchField.module.css';
 
 function SearchField({ value = '', onChange, placeholder = 'Поиск книг...' }) {

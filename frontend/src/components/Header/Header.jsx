@@ -1,4 +1,3 @@
-// Header.jsx - Clean version without search
 import Logo from '../../../public/assets/SiteLogo.png';
 import styles from './Header.module.css';
 import { useState } from 'react';
@@ -20,7 +19,6 @@ function Header() {
     return (
         <header className={styles.header}>
             <div className={styles.container}>
-                {/* Логотип */}
                 <button 
                     className={styles.logoButton} 
                     onClick={handleLogoClick}
@@ -30,7 +28,6 @@ function Header() {
                     <span className={styles.logoText}>MyLib</span>
                 </button>
 
-                {/* Навигация для десктопа */}
                 <nav className={styles.desktopNav} aria-label="Основная навигация">
                     <NavLink 
                         to="/books" 
@@ -52,7 +49,6 @@ function Header() {
                     </NavLink>
                 </nav>
 
-                {/* Кнопка меню для мобильных */}
                 <button 
                     className={`${styles.menuButton} ${menuOpen ? styles.open : ''}`}
                     onClick={() => setMenuOpen(!menuOpen)}
@@ -63,7 +59,6 @@ function Header() {
                 </button>
             </div>
 
-            {/* Мобильное меню */}
             {menuOpen && (
                 <div className={styles.mobileMenu}>
                     <nav className={styles.mobileNav} aria-label="Мобильная навигация">

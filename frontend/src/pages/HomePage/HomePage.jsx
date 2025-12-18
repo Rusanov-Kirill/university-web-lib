@@ -1,4 +1,3 @@
-// HomePage.jsx - Updated with catalog button
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import styles from './HomePage.module.css';
@@ -15,7 +14,6 @@ function HomePage() {
         <>
             <Header />
             <main className={styles.main}>
-                {/* Hero Section */}
                 <section className={styles.hero}>
                     <div className={styles.heroContent}>
                         <h1 className={styles.heroTitle}>Онлайн-библиотека</h1>
@@ -38,7 +36,6 @@ function HomePage() {
                     </div>
                 </section>
 
-                {/* Быстрый старт */}
                 <section className={styles.quickStart}>
                     <h2 className={styles.sectionTitle}>С чего начать?</h2>
                     <div className={styles.startGrid}>
@@ -66,7 +63,6 @@ function HomePage() {
                     </div>
                 </section>
 
-                {/* Преимущества */}
                 <section className={styles.benefits}>
                     <h2 className={styles.sectionTitle}>Почему наша библиотека?</h2>
                     <div className={styles.benefitsGrid}>
