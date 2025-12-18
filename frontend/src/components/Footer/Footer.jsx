@@ -1,13 +1,60 @@
-import styles from './Footer.module.css'
+import styles from './Footer.module.css';
+import { NavLink } from 'react-router-dom';
 
 function Footer() {
     const CURRENT_YEAR = new Date().getFullYear();
+    
     return (
-        <footer className={styles.footer}>
-            <p className={styles.p}>© {CURRENT_YEAR} MyLib official site</p>
-            <p className={styles.p}>Rusanov Industry Online Lib</p>
+        <footer className={styles.footer} aria-label="Подвал сайта">
+            <div className={styles.footerContent}>
+                
+                {/* Информационный блок */}
+                <div className={styles.footerSection}>
+                    <h3 className={styles.sectionTitle}>О библиотеке</h3>
+                    <p className={styles.description}>
+                        Онлайн-библиотека с тысячами книг на любой вкус. 
+                        Читайте классику и современную литературу без ограничений.
+                    </p>
+                    <div className={styles.contactInfo}>
+                        <p>📧 rusanovkirill39@gmail.com</p>
+                    </div>
+                </div>
+                
+                {/* Навигация */}
+                <div className={styles.footerSection}>
+                    <h3 className={styles.sectionTitle}>Разделы</h3>
+                    <nav className={styles.footerNav} aria-label="Футерная навигация">
+                        <NavLink to="/books" className={styles.navLink}>Книги</NavLink>
+                        <NavLink to="/genres" className={styles.navLink}>Жанры</NavLink>
+                        <NavLink to="/authors" className={styles.navLink}>Авторы</NavLink>
+                    </nav>
+                </div>
+                
+            </div>
+            
+            {/* Копирайт и соцсети */}
+            <div className={styles.footerBottom}>
+                <div className={styles.copyright}>
+                    <p>© {CURRENT_YEAR} Онлайн-библиотека. Все права защищены.</p>
+                    <p className={styles.credits}>Rusanov Industry Online Lib</p>
+                </div>
+                
+                {/* Telegram ссылка */}
+                <div className={styles.socialLinks}>
+                    <a 
+                        href="https://t.me/LvMashiro_7" 
+                        className={styles.telegramLink}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        aria-label="Наш Telegram"
+                    >
+                        <span className={styles.telegramIcon}>✈️</span>
+                        <span>Telegram</span>
+                    </a>
+                </div>
+            </div>
         </footer>
-    )
+    );
 }
 
-export default Footer
+export default Footer;
