@@ -1,127 +1,338 @@
+/* HomePage.module.css - Updated for catalog button */
 .main {
-    display: flex;
-    flex-direction: column;
-    margin: 7vh 10vw ;
-    user-select: none;
+    min-height: calc(100vh - 140px);
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #333;
+    line-height: 1.6;
 }
 
-.welcome-sign {
-    display: flex;
-    flex-direction: column;
-    background-color: #2C7EDC;
-    color: white;
-    border-radius: 50px;
-    opacity: 70%;
-    height: 35vh;
-    width: 80vw;    
-    margin: 3vh 0;
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 80px 20px 60px;
+    margin-bottom: 60px;
+}
+
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.heroTitle {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 25px 0;
+    color: #2c3e50;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.heroSubtitle {
+    font-size: 1.4rem;
+    color: #555;
+    margin: 0 0 50px 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* CTA Section */
+.ctaSection {
+    margin-top: 40px;
+}
+
+.catalogCtaButton {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px 40px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-.welcome-text {
-    font-size: 32px;
-    margin: 5vh 5vw;
+.catalogCtaButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.catalogCtaButton:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(52, 152, 219, 0.4);
+    background: linear-gradient(135deg, #2980b9, #2573a7);
+}
+
+.catalogCtaButton:hover::before {
+    left: 100%;
+}
+
+.catalogCtaButton:active {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+}
+
+.buttonIcon {
+    font-size: 1.8rem;
+    transition: transform 0.3s ease;
+}
+
+.catalogCtaButton:hover .buttonIcon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.buttonText {
+    letter-spacing: 0.5px;
+}
+
+.arrow {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.catalogCtaButton:hover .arrow {
+    transform: translateX(5px);
+}
+
+.ctaHint {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 20px;
     text-align: center;
 }
 
-.description-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 42vh;
-    width: 80vw; 
+/* Section Common */
+.sectionTitle {
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 50px 0;
+    color: #2c3e50;
 }
 
-.site-description {
-    text-indent: 2em;
-    color: black;
-    font-size: 30px;
-    font-style: italic;
-    font-weight: lighter;
+/* Quick Start */
+.quickStart {
+    padding: 60px 20px;
+    margin-bottom: 60px;
+}
+
+.startGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.startCard {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.startCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.startCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.startCard:hover::before {
+    transform: scaleX(1);
+}
+
+.cardIcon {
+    font-size: 3rem;
+    margin-bottom: 25px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.startCard:hover .cardIcon {
+    transform: scale(1.1);
+}
+
+.cardTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+}
+
+.cardText {
+    color: #666;
     margin: 0;
-    margin-bottom: 3vh;
-    padding: 0 1vw;
-    text-align: justify;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
-@media (max-width: 480px) {  
-    .welcome-sign {
-        height: 21vh;
-        margin: 2vh 0;
-    }
+/* Benefits */
+.benefits {
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 20px;
+    margin-bottom: 60px;
+}
 
-    .welcome-text {
-        font-size: 28px;
-        margin: auto;
-    }
+.benefitsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
-    .welcome-text:last-child {
-        display: none;
-    }
+.benefitItem {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
 
-    .description-container {
-        height: 61vh;
-    }
+.benefitItem:hover {
+    transform: translateY(-5px);
+}
 
-    .site-description {
-        font-size: 20px;
-        padding: 0;
-        margin-bottom: 1vh;
+.benefitTitle {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.benefitTitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    border-radius: 2px;
+}
+
+.benefitText {
+    color: #555;
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .heroTitle {
+        font-size: 2.2rem;
+    }
+    
+    .heroSubtitle {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+    }
+    
+    .sectionTitle {
+        font-size: 1.8rem;
+        margin-bottom: 40px;
+    }
+    
+    .catalogCtaButton {
+        padding: 18px 30px;
+        font-size: 1.1rem;
+        gap: 12px;
+    }
+    
+    .buttonIcon {
+        font-size: 1.5rem;
+    }
+    
+    .startGrid,
+    .benefitsGrid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .startCard {
+        padding: 30px 20px;
+    }
+    
+    .benefitItem {
+        padding: 25px 20px;
+    }
+    
+    .hero {
+        padding: 60px 20px 40px;
+    }
+    
+    .quickStart,
+    .benefits {
+        padding: 40px 20px;
     }
 }
 
-@media (max-height: 850px) {
-    .site-description {
-        font-size: 18px;
-    }
-}
-
-@media (max-height: 800px) {
-    .site-description {
-        font-size: 16px;
-    }
-}
-
-@media (min-width: 480px) and (max-width: 1024px) {
+@media (max-width: 480px) {
     .main {
-        margin: 12vh 10vw 7vh;
+        padding: 0 15px;
     }
-
-    .welcome-sign {
-        height: 32vh;
-        margin: 2vh 0;
+    
+    .heroTitle {
+        font-size: 1.8rem;
     }
-
-    .welcome-text {
-        font-size: 22px;
-        margin: 3vh 3vw;
+    
+    .heroSubtitle {
+        font-size: 1.1rem;
     }
-
-    .description-container {
-        height: 38vh;
+    
+    .catalogCtaButton {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 1rem;
     }
-
-    .site-description {
-        font-size: 20px;
-        padding: 0;
-        margin-bottom: 1vh;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-    .welcome-text {
-        font-size: 28px;
-        margin: 3vh 5vw;
-    }
-
-    .site-description {
-        font-size: 24px;
-    }
-}
-
-@media (min-width: 1024px) and (max-width: 1440px) {
-    .site-description, .welcome-text {
-        font-size: 32px;
+    
+    .cardIcon {
+        font-size: 2.5rem;
     }
 }
