@@ -1,21 +1,20 @@
-import Header from '../../components/Header/Header'
-import Footer from '../../components/Footer/Footer'
-import Card from '../../components/Card/Card'
-import SearchField from '../../components/SearchField/SearchField'
-import styles from './BooksPage.module.css'
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import BookCard from '../../components/BookCard/BookCard';
+import SearchField from '../../components/SearchField/SearchField';
+import styles from './BooksPage.module.css';
 import { useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react'
-import { useWindowWidth } from '../../hooks/useWindowWidth'
+import { useState, useEffect } from 'react';
 
 function BooksPage() {
     const location = useLocation();
-    const width = useWindowWidth();
 
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState('');
-    const [searchBy, setSearchBy] = useState('title'); // 'title' или 'author'
+    const [searchBy, setSearchBy] = useState('title'); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [activeGenre, setActiveGenre] = useState('');
 
     const params = new URLSearchParams(location.search);
     const genreFilter = params.get('genre') || '';
@@ -23,103 +22,138 @@ function BooksPage() {
     useEffect(() => {
         setLoading(true);
         setError(null);
+        setActiveGenre(genreFilter);
 
-        if (query.trim() !== '') {
-            const endpoint =
-                searchBy === 'title'
-                    ? 'books_search.php'
-                    : 'books_search_author.php';
+        const fetchBooks = async () => {
+            try {
+                let url = 'http://localhost/api/books_extraction.php';
+                
+                if (query.trim() !== '') {
+                    const endpoint = searchBy === 'title' 
+                        ? 'books_search.php' 
+                        : 'books_search_author.php';
+                    url = `http://localhost/api/${endpoint}?${searchBy}=${encodeURIComponent(query)}`;
+                } else if (genreFilter) {
+                    url = `http://localhost/api/books_by_genre.php?genre=${encodeURIComponent(genreFilter)}`;
+                }
 
-            fetch(`http://localhost/api/${endpoint}?${searchBy}=${encodeURIComponent(query)}`)
-                .then(res => {
-                    if (!res.ok) throw new Error(`Ошибка HTTP: ${res.status}`);
-                    return res.json();
-                })
-                .then(data => {
-                    // Фильтруем по жанру, если есть фильтр жанра
-                    const filtered = genreFilter
-                        ? data.filter(book => book.genres.includes(genreFilter))
-                        : data;
-                    setBooks(filtered);
-                    setLoading(false);
-                })
-                .catch(err => {
-                    setError(err.message);
-                    setLoading(false);
-                });
-        } else {
-            // Если пустой запрос, то грузим книги по жанру или все
-            let url = 'http://localhost/api/books_extraction.php';
-            if (genreFilter) {
-                url = `http://localhost/api/books_by_genre.php?genre=${encodeURIComponent(genreFilter)}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`Ошибка сервера: ${response.status}`);
+                
+                const data = await response.json();
+                setBooks(data || []);
+            } catch (err) {
+                setError(err.message);
+                setBooks([]);
+            } finally {
+                setLoading(false);
             }
-            fetch(url)
-                .then(res => {
-                    if (!res.ok) throw new Error(`Ошибка HTTP: ${res.status}`);
-                    return res.json();
-                })
-                .then(data => {
-                    setBooks(data);
-                    setLoading(false);
-                })
-                .catch(err => {
-                    setError(err.message);
-                    setLoading(false);
-                });
-        }
+        };
+
+        fetchBooks();
     }, [query, searchBy, genreFilter]);
 
-    let cardsClass = '';
-    if (width > 480 && width <= 1024) {
-        cardsClass = books.length < 3 ? 'cards-less-3' : 'cards-more-3';
-    } else if (width > 1024) {
-        cardsClass = books.length < 6 ? 'cards-less-6' : 'cards-more-6';
-    }
+    const handleGenreClick = (genre) => {
+        setActiveGenre(genre === activeGenre ? '' : genre);
+        setQuery('');
+    };
+
+    const handleClearFilters = () => {
+        setQuery('');
+        setActiveGenre('');
+        setSearchBy('title');
+    };
 
     return (
         <>
             <Header />
             <main className={styles.main}>
-                <div className={styles['radio-wrapper']}>
-                    <label>
-                        <input
-                            type="radio"
-                            name="searchBy"
-                            value="title"
-                            checked={searchBy === 'title'}
-                            onChange={() => setSearchBy('title')}
-                        />
-                        По названию
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="searchBy"
-                            value="author"
-                            checked={searchBy === 'author'}
-                            onChange={() => setSearchBy('author')}
-                        />
-                        По автору
-                    </label>
-                    <SearchField value={query} onChange={setQuery} />   
-                </div>
-
-                <div className={styles[cardsClass]}>
-                    {loading ? (
-                        <div className={styles['loading-wrapper']}>Loading...</div>
-                    ) : (
-                        books.map(book => (
-                            <Card
-                                key={book.id}
-                                id={book.id}
-                                image={book.image}
-                                title={book.title}
-                                author={book.author}
-                                genres={book.genres}
+                <section className={styles.searchSection}>
+                    <div className={styles.searchContainer}>
+                        <div className={styles.searchOptions}>
+                            <div className={styles.radioGroup}>
+                                <button
+                                    className={`${styles.radioButton} ${searchBy === 'title' ? styles.active : ''}`}
+                                    onClick={() => setSearchBy('title')}
+                                    aria-pressed={searchBy === 'title'}
+                                >
+                                    По названию
+                                </button>
+                                <button
+                                    className={`${styles.radioButton} ${searchBy === 'author' ? styles.active : ''}`}
+                                    onClick={() => setSearchBy('author')}
+                                    aria-pressed={searchBy === 'author'}
+                                >
+                                    По автору
+                                </button>
+                            </div>
+                            <SearchField 
+                                value={query} 
+                                onChange={setQuery}
+                                placeholder={searchBy === 'title' ? 'Введите название книги...' : 'Введите имя автора...'}
                             />
-                        ))
+                        </div>
+                    </div>
+                </section>
+
+                <div className={styles.resultsInfo}>
+                    {loading ? (
+                        <div className={styles.statusMessage}>
+                            <div className={styles.loadingSpinner}></div>
+                            <p>Загрузка книг...</p>
+                        </div>
+                    ) : error ? (
+                        <div className={styles.statusMessage}>
+                            <div className={styles.errorIcon}>⚠️</div>
+                            <p>Произошла ошибка: {error}</p>
+                            <button 
+                                className={styles.retryButton}
+                                onClick={() => window.location.reload()}
+                            >
+                                Попробовать снова
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <h2 className={styles.resultsTitle}>
+                                {activeGenre ? `Книги в жанре "${activeGenre}"` : 'Все книги'}
+                                {query && ` по запросу "${query}"`}
+                            </h2>
+                            <p className={styles.resultsCount}>Найдено книг: {books.length}</p>
+                        </>
                     )}
                 </div>
+
+                {!loading && !error && (
+                    <section className={styles.booksGrid}>
+                        {books.length > 0 ? (
+                            books.map((book) => (
+                                <BookCard
+                                    key={book.id}
+                                    id={book.id}
+                                    image={book.image}
+                                    title={book.title}
+                                    author={book.author}
+                                    genres={book.genres}
+                                    year={book.year}
+                                    rating={book.rating}
+                                />
+                            ))
+                        ) : (
+                            <div className={styles.emptyState}>
+                                <div className={styles.emptyIcon}>📚</div>
+                                <h3>Книги не найдены</h3>
+                                <p>Попробуйте изменить поисковый запрос или выберите другой жанр</p>
+                                <button 
+                                    className={styles.browseButton}
+                                    onClick={handleClearFilters}
+                                >
+                                    Показать все книги
+                                </button>
+                            </div>
+                        )}
+                    </section>
+                )}
             </main>
             <Footer />
         </>

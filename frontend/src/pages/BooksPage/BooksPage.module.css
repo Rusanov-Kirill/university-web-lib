@@ -1,70 +1,288 @@
 .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.searchSection {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 20px;
+    padding: 40px 30px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.searchContainer {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.searchOptions {
     display: flex;
     flex-direction: column;
-    margin: 7vh 10vw;
+    gap: 25px;
+    margin-bottom: 30px;
 }
 
-.radio-wrapper {
+.radioGroup {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    gap: 15px;
     justify-content: center;
-    gap: 10px;
-    margin: 0 5vw;
 }
 
-.cards-less-6 {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-bottom: 3vh;
-}
-
-.cards-more-6 {
-    display: grid;
-    grid-template-columns: repeat(6, auto);
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 3vh;
-}
-
-.loading-wrapper {
-    position: absolute;
-    top: 0; 
-    left: 0;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
+.radioButton {
+    padding: 12px 24px;
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    font-size: 1rem;
     font-weight: 500;
-    color: black;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #495057;
+    min-width: 140px;
 }
 
-@media (min-width: 481px) and (max-width: 1024px) {
+.radioButton:hover {
+    border-color: #3498db;
+    background: rgba(52, 152, 219, 0.05);
+}
+
+.radioButton.active {
+    background: #3498db;
+    border-color: #3498db;
+    color: white;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.genreFilters {
+    margin-top: 30px;
+}
+
+.filterTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.genreButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.genreButton {
+    padding: 10px 20px;
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #495057;
+}
+
+.genreButton:hover {
+    border-color: #3498db;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+}
+
+.genreButton.active {
+    background: #3498db;
+    border-color: #3498db;
+    color: white;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.clearButton {
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid #95a5a6;
+    border-radius: 8px;
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 auto;
+    display: block;
+}
+
+.clearButton:hover {
+    background: #95a5a6;
+    color: white;
+}
+
+.resultsInfo {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.statusMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.loadingSpinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.errorIcon {
+    font-size: 3rem;
+}
+
+.retryButton {
+    padding: 12px 30px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.retryButton:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.resultsTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.resultsCount {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.booksGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.emptyState {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 40px;
+    background: #f8f9fa;
+    border-radius: 20px;
+    border: 2px dashed #dee2e6;
+}
+
+.emptyIcon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.emptyState h3 {
+    font-size: 1.8rem;
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+}
+
+.emptyState p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    margin: 0 0 25px 0;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.browseButton {
+    padding: 14px 40px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.browseButton:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+}
+
+@media (max-width: 768px) {
     .main {
-        margin: 12vh 10vw 7vh;
-
-        input {
-            display: none;
-        }
+        padding: 20px 15px 40px;
     }
-
-    .cards-less-3 {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        flex-wrap: wrap;
+    
+    .searchSection {
+        padding: 30px 20px;
+    }
+    
+    .radioGroup {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .radioButton {
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .genreButtons {
         justify-content: flex-start;
-        margin-bottom: 2vh;
     }
+    
+    .resultsTitle {
+        font-size: 1.6rem;
+    }
+    
+    .booksGrid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+}
 
-    .cards-more-3 {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin-bottom: 2vh;
+@media (max-width: 480px) {
+    .searchSection {
+        padding: 25px 15px;
+    }
+    
+    .resultsTitle {
+        font-size: 1.4rem;
+    }
+    
+    .booksGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .emptyState {
+        padding: 40px 20px;
     }
 }
