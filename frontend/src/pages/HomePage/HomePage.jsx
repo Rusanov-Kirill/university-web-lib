@@ -8,7 +8,7 @@ function HomePage() {
     const navigate = useNavigate();
 
     const handleCatalogClick = () => {
-        navigate('/catalog');
+        navigate('/books');
     };
 
     return (
