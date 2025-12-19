@@ -3,11 +3,12 @@ import Footer from '../../components/Footer/Footer';
 import BookCard from '../../components/BookCard/BookCard';
 import SearchField from '../../components/SearchField/SearchField';
 import styles from './BooksPage.module.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 function BooksPage() {
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState('');
@@ -54,9 +55,7 @@ function BooksPage() {
     }, [query, searchBy, genreFilter]);
 
     const handleClearFilters = () => {
-        setQuery('');
-        setActiveGenre('');
-        setSearchBy('title');
+        navigate('/books');
     };
 
     return (
