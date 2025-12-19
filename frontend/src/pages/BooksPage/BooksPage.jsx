@@ -53,11 +53,6 @@ function BooksPage() {
         fetchBooks();
     }, [query, searchBy, genreFilter]);
 
-    const handleGenreClick = (genre) => {
-        setActiveGenre(genre === activeGenre ? '' : genre);
-        setQuery('');
-    };
-
     const handleClearFilters = () => {
         setQuery('');
         setActiveGenre('');
