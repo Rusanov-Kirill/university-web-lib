@@ -167,17 +167,6 @@ function AdminLogin() {
         <div className={styles['login-container']}>
           <h1 className={styles.title}>Вход в админ панель</h1>
 
-          {hasYandexId && !showYandexLinkPrompt && (
-            <button
-              onClick={handleYandexLogin}
-              className={`${styles.button} ${styles.yandexButton}`}
-              disabled={loading}
-              style={{ marginBottom: '20px' }}
-            >
-              🚀 Войти через Яндекс (1 клик)
-            </button>
-          )}
-
           {!showYandexLinkPrompt ? (
             <>
               <form className={styles.form} onSubmit={handleSubmit}>
@@ -218,6 +207,17 @@ function AdminLogin() {
                 >
                   {loading ? 'Вход...' : 'Войти по логину'}
                 </button>
+
+                {hasYandexId && !showYandexLinkPrompt && (
+                  <button
+                    onClick={handleYandexLogin}
+                    className={`${styles.button} ${styles.yandexButton}`}
+                    disabled={loading}
+                    style={{ marginBottom: '20px' }}
+                  >
+                    🚀 Войти через Яндекс 
+                  </button>
+                )}
               </form>
             </>
           ) : (
