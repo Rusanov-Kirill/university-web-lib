@@ -170,3 +170,27 @@
         border: 1px solid #ddd;
     }
 }
+
+.yandexPrompt {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.yandexPrompt h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.yandexPrompt p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.buttonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
