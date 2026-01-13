@@ -42,8 +42,7 @@ function AdminPanel() {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('isAdmin');
-        localStorage.removeItem('adminLoginTime');
+        localStorage.clear();
         navigate('/admin-login');
     };
 
@@ -74,9 +73,9 @@ function AdminPanel() {
 
         try {
             const [booksRes, authorsRes, genresRes] = await Promise.all([
-                fetch('http://localhost/api/books_extraction.php'),
-                fetch('http://localhost/api/authors_extraction.php'),
-                fetch('http://localhost/api/genres_extraction.php')
+                fetch('/api/books_extraction.php'),
+                fetch('/api/authors_extraction.php'),
+                fetch('/api/genres_extraction.php')
             ]);
 
             if (!booksRes.ok || !authorsRes.ok || !genresRes.ok) {
@@ -99,7 +98,7 @@ function AdminPanel() {
 
     const loadAvailableGenres = async () => {
         try {
-            const response = await fetch('http://localhost/api/genres_extraction.php');
+            const response = await fetch('/api/genres_extraction.php');
             const data = await response.json();
             setAvailableGenres(data);
         } catch (err) {
@@ -147,7 +146,7 @@ function AdminPanel() {
                 formData.append('image', bookForm.image);
             }
 
-            const response = await fetch('http://localhost/api/admin/add_book.php', {
+            const response = await fetch('/api/admin/add_book.php', {
                 method: 'POST',
                 body: formData
             });
@@ -177,7 +176,7 @@ function AdminPanel() {
                 formData.append('image', authorForm.image);
             }
 
-            const response = await fetch('http://localhost/api/admin/add_author.php', {
+            const response = await fetch('/api/admin/add_author.php', {
                 method: 'POST',
                 body: formData
             });
@@ -199,7 +198,7 @@ function AdminPanel() {
     const handleGenreSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost/api/admin/add_genre.php', {
+            const response = await fetch('/api/admin/add_genre.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(genreForm)
@@ -239,7 +238,7 @@ function AdminPanel() {
         e.preventDefault();
         try {
             const { type, id } = editingItem;
-            const endpoint = `http://localhost/api/admin/update_${type}.php`;
+            const endpoint = `/api/admin/update_${type}.php`;
 
             if (type === 'book' || type === 'author') {
                 const formData = new FormData();
@@ -297,7 +296,7 @@ function AdminPanel() {
         if (!window.confirm('Вы уверены, что хотите удалить эту запись?')) return;
 
         try {
-            const response = await fetch(`http://localhost/api/admin/delete_${type}.php?id=${id}`, {
+            const response = await fetch(`/api/admin/delete_${type}.php?id=${id}`, {
                 method: 'DELETE'
             });
 

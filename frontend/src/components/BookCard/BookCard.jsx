@@ -15,11 +15,11 @@ const BookCard = ({ id, image, title, author, genres, year, rating }) => {
         >
             <div className={styles.imageContainer}>
                 <img 
-                    src={image || '/default-book-cover.jpg'} 
+                    src={image || '/assets/no-image.png'} 
                     alt={`Обложка книги "${title}"`}
                     className={styles.image}
                     onError={(e) => {
-                        e.target.src = '/default-book-cover.jpg';
+                        e.target.src = '/assets/no-image.png';
                     }}
                 />
                 {rating && (

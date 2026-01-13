@@ -22,9 +22,9 @@ function Footer() {
                 <div className={styles.footerSection}>
                     <h3 className={styles.sectionTitle}>Разделы</h3>
                     <nav className={styles.footerNav} aria-label="Футерная навигация">
-                        <NavLink to="/books" className={styles.navLink}>Книги</NavLink>
-                        <NavLink to="/genres" className={styles.navLink}>Жанры</NavLink>
-                        <NavLink to="/authors" className={styles.navLink}>Авторы</NavLink>
+                        <NavLink to="/books" className={styles.navLink} title="Перейти к разделу книг">Книги</NavLink>
+                        <NavLink to="/genres" className={styles.navLink} title="Перейти к разделу жанров литературы">Жанры</NavLink>
+                        <NavLink to="/authors" className={styles.navLink} title="Перейти к разделу авторов">Авторы</NavLink>
                     </nav>
                 </div>
                 
@@ -43,6 +43,7 @@ function Footer() {
                         target="_blank" 
                         rel="noopener noreferrer"
                         aria-label="Наш Telegram"
+                        title="Перейти в наш Telegram-канал"
                     >
                         <span className={styles.telegramIcon}>✈️</span>
                         <span>Telegram</span>

@@ -2,6 +2,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import BookCard from '../../components/BookCard/BookCard';
 import SearchField from '../../components/SearchField/SearchField';
+import SecurityUtils from '../../utils/validation';
 import styles from './BooksPage.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -12,7 +13,7 @@ function BooksPage() {
 
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState('');
-    const [searchBy, setSearchBy] = useState('title'); 
+    const [searchBy, setSearchBy] = useState('title');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeGenre, setActiveGenre] = useState('');
@@ -27,22 +28,38 @@ function BooksPage() {
 
         const fetchBooks = async () => {
             try {
-                let url = 'http://localhost/api/books_extraction.php';
-                
+                if (query && !SecurityUtils.validateSearchQuery(query)) {
+                    throw new Error('Некорректный поисковый запрос');
+                }
+
+                if (genreFilter && !SecurityUtils.validateSearchQuery(genreFilter)) {
+                    throw new Error('Некорректный жанр');
+                }
+
+                let url = '/api/books_extraction.php';
+
                 if (query.trim() !== '') {
-                    const endpoint = searchBy === 'title' 
-                        ? 'books_search.php' 
+                    const endpoint = searchBy === 'title'
+                        ? 'books_search.php'
                         : 'books_search_author.php';
-                    url = `http://localhost/api/${endpoint}?${searchBy}=${encodeURIComponent(query)}`;
+                    url = `/api/${endpoint}?${searchBy}=${encodeURIComponent(query)}`;
                 } else if (genreFilter) {
-                    url = `http://localhost/api/books_by_genre.php?genre=${encodeURIComponent(genreFilter)}`;
+                    url = `/api/books_by_genre.php?genre=${encodeURIComponent(genreFilter)}`;
                 }
 
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`Ошибка сервера: ${response.status}`);
-                
+
                 const data = await response.json();
-                setBooks(data || []);
+
+                const safeData = Array.isArray(data)
+                    ? data.map(book => ({
+                        ...book,
+                        title: SecurityUtils.escapeHtml(book.title),
+                        author: SecurityUtils.escapeHtml(book.author),
+                    }))
+                    : [];
+                setBooks(safeData);
             } catch (err) {
                 setError(err.message);
                 setBooks([]);
@@ -81,8 +98,8 @@ function BooksPage() {
                                     По автору
                                 </button>
                             </div>
-                            <SearchField 
-                                value={query} 
+                            <SearchField
+                                value={query}
                                 onChange={setQuery}
                                 placeholder={searchBy === 'title' ? 'Введите название книги...' : 'Введите имя автора...'}
                             />
@@ -100,7 +117,7 @@ function BooksPage() {
                         <div className={styles.statusMessage}>
                             <div className={styles.errorIcon}>⚠️</div>
                             <p>Произошла ошибка: {error}</p>
-                            <button 
+                            <button
                                 className={styles.retryButton}
                                 onClick={() => window.location.reload()}
                             >
@@ -138,7 +155,7 @@ function BooksPage() {
                                 <div className={styles.emptyIcon}>📚</div>
                                 <h3>Книги не найдены</h3>
                                 <p>Попробуйте изменить поисковый запрос или выберите другой жанр</p>
-                                <button 
+                                <button
                                     className={styles.browseButton}
                                     onClick={handleClearFilters}
                                 >

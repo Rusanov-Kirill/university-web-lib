@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Googlebot
+Allow: /books/*
+Allow: /authors/*
+Disallow: /admin/
+
+User-agent: Yandex
+Allow: /books/*
+Allow: /authors/*
+Disallow: /admin/

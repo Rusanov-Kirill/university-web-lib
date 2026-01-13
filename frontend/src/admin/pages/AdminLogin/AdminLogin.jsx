@@ -54,7 +54,7 @@ function AdminLogin() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost/api/admin/verify_yandex.php', {
+      const response = await fetch('/api/admin/verify_yandex.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ yandex_id: yandexId })
@@ -86,7 +86,7 @@ function AdminLogin() {
   const handleYandexLink = () => {
     console.log('Привязка Яндекс с токеном:', pendingToken);
     const clientId = import.meta.env.VITE_YANDEX_CLIENT_ID;
-    const redirectUri = encodeURIComponent('http://localhost/api/admin/yandex_callback.php');
+    const redirectUri = encodeURIComponent('https://unchurlishly-epiploic-annabelle.ngrok-free.dev/api/admin/yandex_callback.php');
     const state = encodeURIComponent(pendingToken);
 
     const authUrl = `https://oauth.yandex.com/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&prompt=login`;
@@ -97,7 +97,6 @@ function AdminLogin() {
   const handleCancelYandexLink = () => {
     setShowYandexLinkPrompt(false);
     setPendingToken('');
-    // Просто переходим в админку без привязки Яндекс
     localStorage.setItem('isAdmin', 'true');
     localStorage.setItem('adminLoginTime', new Date().getTime().toString());
     navigate('/admin');
@@ -111,7 +110,7 @@ function AdminLogin() {
     setPendingToken('');
 
     try {
-      const response = await fetch('http://localhost/api/admin/user_login.php', {
+      const response = await fetch('/api/admin/user_login.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,15 +125,12 @@ function AdminLogin() {
 
       if (response.ok) {
         if (data.is_admin) {
-          // Если у админа уже привязан Яндекс ID
           if (data.yandex_linked) {
             const loginTime = new Date().getTime();
             localStorage.setItem('isAdmin', 'true');
             localStorage.setItem('adminLoginTime', loginTime.toString());
             navigate('/admin');
           } else {
-            // ПРЕДЛАГАЕМ привязать Яндекс ID, но не заставляем
-            // Сохраняем временный токен для возможной привязки
             setPendingToken(data.pending_token);
             setShowYandexLinkPrompt(true);
           }

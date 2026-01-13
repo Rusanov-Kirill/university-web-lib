@@ -26,7 +26,7 @@ function AuthorsPage() {
                 setLoading(true);
                 setError(null);
 
-                const authorsResponse = await fetch('http://localhost/api/authors_extraction.php');
+                const authorsResponse = await fetch('/api/authors_extraction.php');
                 if (!authorsResponse.ok) {
                     throw new Error(`Ошибка сервера: ${authorsResponse.status}`);
                 }
@@ -62,7 +62,7 @@ function AuthorsPage() {
             for (const author of authorsList) {
                 try {
                     const response = await fetch(
-                        `http://localhost/api/books_search_author.php?author=${encodeURIComponent(author.name)}`
+                        `/api/books_search_author.php?author=${encodeURIComponent(author.name)}`
                     );
                     
                     if (response.ok) {
@@ -104,7 +104,7 @@ function AuthorsPage() {
             setSelectedAuthor(authorName);
             
             const response = await fetch(
-                `http://localhost/api/books_search_author.php?author=${encodeURIComponent(authorName)}`
+                `/api/books_search_author.php?author=${encodeURIComponent(authorName)}`
             );
             
             if (!response.ok) {

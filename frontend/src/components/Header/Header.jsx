@@ -23,6 +23,7 @@ function Header() {
                     className={styles.logoButton} 
                     onClick={handleLogoClick}
                     aria-label="На главную"
+                    title="На главную"
                 >
                     <img src={Logo} alt="Логотип онлайн-библиотеки" className={styles.logoImage} />
                     <span className={styles.logoText}>MyLib</span>
@@ -32,18 +33,21 @@ function Header() {
                     <NavLink 
                         to="/books" 
                         className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+                        title="Перейти к разделу книг"
                     >
                         Книги
                     </NavLink>
                     <NavLink 
                         to="/genres" 
                         className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+                        title="Перейти к разделу жанров литературы"
                     >
                         Жанры
                     </NavLink>
                     <NavLink 
                         to="/authors" 
                         className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+                        title="Перейти к разделу авторов"
                     >
                         Авторы
                     </NavLink>
@@ -66,6 +70,7 @@ function Header() {
                             to="/books" 
                             className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.active : ''}`}
                             onClick={handleNavClick}
+                            title="Перейти к разделу книг"
                         >
                             Книги
                         </NavLink>
@@ -73,6 +78,7 @@ function Header() {
                             to="/genres" 
                             className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.active : ''}`}
                             onClick={handleNavClick}
+                            title="Перейти к разделу жанров литературы"
                         >
                             Жанры
                         </NavLink>
@@ -80,6 +86,7 @@ function Header() {
                             to="/authors" 
                             className={({ isActive }) => `${styles.mobileNavLink} ${isActive ? styles.active : ''}`}
                             onClick={handleNavClick}
+                            title="Перейти к разделу авторов"
                         >
                             Авторы
                         </NavLink>

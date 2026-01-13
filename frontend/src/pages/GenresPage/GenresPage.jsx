@@ -100,13 +100,13 @@ function GenresPage() {
             try {
                 setLoading(true);
 
-                const genresResponse = await fetch('http://localhost/api/get_genres.php');
+                const genresResponse = await fetch('/api/get_genres.php');
                 const genresData = await genresResponse.json();
 
-                const countResponse = await fetch('http://localhost/api/get_books_count.php');
+                const countResponse = await fetch('/api/get_books_count.php');
                 const countData = await countResponse.json();
 
-                const allBooksCount = await fetch('http://localhost/api/books_extraction.php');
+                const allBooksCount = await fetch('/api/books_extraction.php');
                 const allBooksData = await allBooksCount.json();
                 setBooks(allBooksData);
 

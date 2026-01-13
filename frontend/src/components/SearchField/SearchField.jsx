@@ -1,23 +1,27 @@
 import styles from './SearchField.module.css';
+import SecurityUtils from '../../utils/validation';
 
 function SearchField({ value = '', onChange, placeholder = 'Поиск книг...' }) {
     const handleChange = (e) => {
         if (onChange) {
-            onChange(e.target.value);
+            if (SecurityUtils.validateSearchQuery(e.target.value)) {
+                onChange(e.target.value);
+            }
         }
     };
 
     return (
         <div className={styles.searchContainer}>
-            <input 
+            <input
                 type="search"
                 className={styles.searchInput}
-                placeholder={placeholder}
+                placeholder={SecurityUtils.escapeHtml(placeholder)}
                 value={value}
                 onChange={handleChange}
+                maxLength="200"
                 aria-label="Поиск книг"
             />
-            <button 
+            <button
                 className={styles.searchButton}
                 type="button"
                 aria-label="Начать поиск"

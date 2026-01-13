@@ -1,4 +1,14 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json; charset=utf-8");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 require_once __DIR__ . '/../db_connection.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -54,9 +64,8 @@ if (!isset($_GET['code']) || !isset($_GET['state'])) {
 }
 
 $code  = $_GET['code'];
-$state = $_GET['state']; // pending_token
+$state = $_GET['state'];
 
-// 1. Обмен кода на access_token
 $tokenData = sendTokenRequest($code);
 if (!$tokenData || !isset($tokenData['access_token'])) {
     http_response_code(400);
@@ -66,7 +75,6 @@ if (!$tokenData || !isset($tokenData['access_token'])) {
 
 $accessToken = $tokenData['access_token'];
 
-// 2. Получаем профиль пользователя
 $userInfo = getUserInfo($accessToken);
 if (!$userInfo) {
     http_response_code(400);
@@ -74,7 +82,6 @@ if (!$userInfo) {
     exit;
 }
 
-// Yandex ID может быть в полях id или uid
 $yandexId = $userInfo['id'] ?? ($userInfo['uid'] ?? null);
 if (!$yandexId) {
     http_response_code(400);
@@ -82,7 +89,6 @@ if (!$yandexId) {
     exit;
 }
 
-// 3. Находим pending запись по state
 $stmt = $pdo->prepare("SELECT user_id FROM pending_yandex_link WHERE token = :token");
 $stmt->execute(['token' => $state]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -95,19 +101,16 @@ if (!$row) {
 
 $userId = $row['user_id'];
 
-// 4. Обновляем users.yandex_id
 $stmt = $pdo->prepare("UPDATE users SET yandex_id = :yid WHERE id = :id");
 $stmt->execute([
     'yid' => $yandexId,
     'id'  => $userId
 ]);
 
-// 5. Удаляем временную запись
 $stmt = $pdo->prepare("DELETE FROM pending_yandex_link WHERE token = :token");
 $stmt->execute(['token' => $state]);
 
-// 6. *** НОВОЕ: Передаём yandex_id на фронт через URL ***
-$redirectFront = 'http://localhost/admin-yandex-complete?yandex_linked=1&yandex_id=' . urlencode($yandexId);
+$redirectFront = 'https://unchurlishly-epiploic-annabelle.ngrok-free.dev/admin-yandex-complete?yandex_linked=1&yandex_id=' . urlencode($yandexId);
 header('Location: ' . $redirectFront);
 exit;
 ?>
